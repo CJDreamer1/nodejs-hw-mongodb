@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
-dotenv.config(); // Завантаження змінних оточення з .env файлу
+dotenv.config();
 
 export const initMongoConnection = async () => {
   try {

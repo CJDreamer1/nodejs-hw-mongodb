@@ -1,5 +1,5 @@
 import { setupServer } from './server.js';
-import { initMongoConnection } from './db/db.js';
+import { initMongoConnection } from './db/initMongoConnection.js';
 
 initMongoConnection()
   .then(() => {

@@ -3,11 +3,11 @@ import cors from 'cors';
 import express from 'express';
 import dotenv from 'dotenv';
 
-import { getAllContacts } from './controllers/contacts.js';
+import { getAllContacts, getContactById } from './controllers/contacts.js';
 
-dotenv.config(); // Завантаження змінних оточення з .env файлу
+dotenv.config();
 
-const PORT = Number(process.env.PORT) || 3000; // Завдання значення за замовчуванням
+const PORT = Number(process.env.PORT) || 3000;
 
 export function setupServer() {
   const app = express();
@@ -24,9 +24,10 @@ export function setupServer() {
   );
 
   app.get('/contacts', getAllContacts);
+  app.get('/contacts/:contactId', getContactById);
 
   app.use((req, res, next) => {
-    res.status(404).send({ message: 'Not Found' });
+    res.status(404).send({ message: 'Not found' });
   });
 
   app.listen(PORT, () => {
