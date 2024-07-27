@@ -1,7 +1,27 @@
 import { Contact } from '../db/models/contact.js';
 
-function getContacts() {
-  return Contact.find();
+async function getContacts({ page, perPage, sortBy, sortOrder }) {
+  const limit = perPage;
+  const skip = page > 0 ? (page - 1) * perPage : 0;
+
+  const [contacts, count] = await Promise.all([
+    Contact.find()
+      .sort({ [sortBy]: sortOrder })
+      .skip(skip)
+      .limit(limit)
+      .exec(),
+    Contact.countDocuments(),
+  ]);
+
+  const totalPages = Math.ceil(count / perPage);
+  return {
+    data: contacts,
+    page,
+    perPage,
+    totalItems: count,
+    hasNextPage: totalPages - page > 0,
+    hasPreviousPage: page > 1,
+  };
 }
 
 function getContactById(studentId) {
