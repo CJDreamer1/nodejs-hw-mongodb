@@ -4,16 +4,19 @@ import { contactSchema } from '../validation/contacts.js';
 
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
+import { parseIsFavouriteParams } from '../utils/parseIsFavouriteParams.js';
 
 async function getAllContacts(req, res, next) {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query);
+  const { isFavourite } = parseIsFavouriteParams(req.query);
 
   const contacts = await ContactService.getContacts({
     page,
     perPage,
     sortBy,
     sortOrder,
+    isFavourite,
   });
 
   res.status(200).json({
