@@ -9,12 +9,10 @@ import {
 } from '../controllers/contacts.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
-// import { validateBody } from '../middlewares/validateBody.js';
+import { validateBody } from '../middlewares/validateBody.js';
 import { isValidId } from '../middlewares/isValidId.js';
-
+import { contactSchema } from '../validation/contacts.js';
 import { auth } from '../middlewares/authenticate.js';
-// import { registerSchema, loginSchema } from '../validation/auth.js';
-// import { contactSchema } from '../validation/contacts.js';
 
 const router = express.Router();
 const jsonParser = express.json();
@@ -26,7 +24,7 @@ router.post(
   '/contacts',
   auth,
   jsonParser,
-  // validateBody(contactSchema), //преревірка
+  validateBody(contactSchema), //преревірка
   ctrlWrapper(createContact),
 );
 
