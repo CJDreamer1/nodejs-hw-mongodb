@@ -24,7 +24,7 @@ router.post(
   '/contacts',
   auth,
   jsonParser,
-  validateBody(contactSchema), //преревірка
+  validateBody(contactSchema),
   ctrlWrapper(createContact),
 );
 

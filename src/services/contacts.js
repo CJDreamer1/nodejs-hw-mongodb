@@ -17,8 +17,6 @@ async function getContacts({
     filter.isFavourite = isFavourite;
   }
 
-  // filter.userId = userId; //фільтрація за власником
-
   const [contacts, count] = await Promise.all([
     Contact.find(filter)
       .sort({ [sortBy]: sortOrder })

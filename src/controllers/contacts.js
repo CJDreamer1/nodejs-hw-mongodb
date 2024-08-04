@@ -1,6 +1,5 @@
 import * as ContactService from '../services/contacts.js';
 import createHttpError from 'http-errors';
-// import { contactSchema } from '../validation/contacts.js';
 
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
