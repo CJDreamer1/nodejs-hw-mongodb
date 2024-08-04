@@ -7,14 +7,17 @@ async function getContacts({
   sortOrder,
   type,
   isFavourite,
+  userId,
 }) {
   const limit = perPage;
   const skip = page > 0 ? (page - 1) * perPage : 0;
 
-  const filter = {};
+  const filter = { userId };
   if (typeof isFavourite !== 'undefined') {
     filter.isFavourite = isFavourite;
   }
+
+  // filter.userId = userId; //фільтрація за власником
 
   const [contacts, count] = await Promise.all([
     Contact.find(filter)
@@ -36,20 +39,20 @@ async function getContacts({
   };
 }
 
-function getContactById(studentId) {
-  return Contact.findById(studentId);
+function getContactById(id, userId) {
+  return Contact.findOne({ _id: id, userId });
 }
 
 function createContact(contact) {
   return Contact.create(contact);
 }
 
-function patchContact(studentId, contact) {
-  return Contact.findByIdAndUpdate(studentId, contact, { new: true });
+function patchContact(id, contact) {
+  return Contact.findByIdAndUpdate(id, contact, { new: true });
 }
 
-function deleteContact(studentId) {
-  return Contact.findByIdAndDelete(studentId);
+function deleteContact(id) {
+  return Contact.findByIdAndDelete(id);
 }
 
 export {

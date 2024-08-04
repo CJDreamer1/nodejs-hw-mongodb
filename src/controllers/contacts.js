@@ -17,6 +17,7 @@ async function getAllContacts(req, res, next) {
     sortBy,
     sortOrder,
     isFavourite,
+    userId: req.user._id,
   });
 
   res.status(200).json({
@@ -46,6 +47,7 @@ async function createContact(req, res, next) {
     email: req.body.email,
     isFavourite: req.body.isFavourite,
     contactType: req.body.contactType,
+    userId: req.user._id,
   };
 
   const createdContact = await ContactService.createContact(contact);
