@@ -5,7 +5,6 @@ async function getContacts({
   perPage,
   sortBy,
   sortOrder,
-  type,
   isFavourite,
   userId,
 }) {
@@ -13,22 +12,24 @@ async function getContacts({
   const skip = page > 0 ? (page - 1) * perPage : 0;
 
   const filter = { userId };
+
   if (typeof isFavourite !== 'undefined') {
     filter.isFavourite = isFavourite;
   }
 
+  const contactQuery = Contact.find(filter)
+    .sort({ [sortBy]: sortOrder })
+    .skip(skip)
+    .limit(limit);
+
   const [contacts, count] = await Promise.all([
-    Contact.find(filter)
-      .sort({ [sortBy]: sortOrder })
-      .skip(skip)
-      .limit(limit)
-      .exec(),
+    contactQuery.exec(),
     Contact.countDocuments(filter),
   ]);
 
   const totalPages = Math.ceil(count / perPage);
   return {
-    data: contacts,
+    contacts,
     page,
     perPage,
     totalItems: count,
@@ -37,26 +38,28 @@ async function getContacts({
   };
 }
 
-function getContactById(id, userId) {
-  return Contact.findOne({ _id: id, userId });
+function getContactById(contactId, userId) {
+  return Contact.findOne({ _id: contactId, userId });
 }
 
 function createContact(contact) {
   return Contact.create(contact);
 }
 
-function patchContact(id, contact) {
-  return Contact.findByIdAndUpdate(id, contact, { new: true });
+function deleteContact(contactId, userId) {
+  return Contact.findOneAndDelete({ _id: contactId, userId });
 }
 
-function deleteContact(id) {
-  return Contact.findByIdAndDelete(id);
+function updateContact(contactId, contact, userId) {
+  return Contact.findOneAndUpdate({ _id: contactId, userId }, contact, {
+    new: true,
+  });
 }
 
 export {
   getContacts,
   getContactById,
   createContact,
-  patchContact,
   deleteContact,
+  updateContact,
 };

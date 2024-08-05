@@ -7,7 +7,7 @@ export const contactSchema = Joi.object({
     'string.max': 'Name must be at most {#limit} characters long',
   }),
   phoneNumber: Joi.number().required(),
-  email: Joi.string().email().required().messages({
+  email: Joi.string().email().messages({
     'string.email': 'Email is not valid',
   }),
   contactType: Joi.string()
