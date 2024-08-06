@@ -9,9 +9,11 @@ import { ACCESS_TOKEN_TTL, REFRESH_TOKEN_TTL } from '../constants/index.js';
 
 async function registerUser(user) {
   const maybeUser = await User.findOne({ email: user.email });
+
   if (maybeUser !== null) {
     throw createHttpError(409, 'Email in use');
   }
+
   user.password = await bcrypt.hash(user.password, 10);
 
   return User.create(user);

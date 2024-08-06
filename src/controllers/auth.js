@@ -9,7 +9,7 @@ async function register(req, res) {
 
   const registeredUser = await AuthService.registerUser(user);
 
-  res.send({
+  res.status(201).send({
     status: 201,
     message: 'Successfully registered a user!',
     data: registeredUser,
