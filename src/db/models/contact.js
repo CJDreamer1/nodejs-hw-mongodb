@@ -28,6 +28,10 @@ const contactSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
+    avatarUrl: {
+      type: String,
+      default: null,
+    },
   },
   { timestamps: true },
 );

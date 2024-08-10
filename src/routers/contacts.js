@@ -14,6 +14,9 @@ import { isValidId } from '../middlewares/isValidId.js';
 import { contactSchema } from '../validation/contacts.js';
 import { auth } from '../middlewares/authenticate.js';
 
+import { changeUserAvatar } from '../controllers/contacts.js';
+import { upload } from '../middlewares/upload.js';
+
 const router = express.Router();
 const jsonParser = express.json();
 
@@ -34,6 +37,8 @@ router.patch(
   isValidId,
   jsonParser,
   ctrlWrapper(patchContact),
+  upload.single('avatar'),
+  ctrlWrapper(changeUserAvatar),
 );
 
 router.delete('/contacts/:id', auth, isValidId, ctrlWrapper(deleteContact));
