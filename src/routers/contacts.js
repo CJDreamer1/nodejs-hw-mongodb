@@ -6,6 +6,7 @@ import {
   createContact,
   patchContact,
   deleteContact,
+  changeUserAvatar,
 } from '../controllers/contacts.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
@@ -14,7 +15,6 @@ import { isValidId } from '../middlewares/isValidId.js';
 import { contactSchema } from '../validation/contacts.js';
 import { auth } from '../middlewares/authenticate.js';
 
-import { changeUserAvatar } from '../controllers/contacts.js';
 import { upload } from '../middlewares/upload.js';
 
 const router = express.Router();
@@ -36,9 +36,9 @@ router.patch(
   auth,
   isValidId,
   jsonParser,
-  ctrlWrapper(patchContact),
   upload.single('avatar'),
   ctrlWrapper(changeUserAvatar),
+  ctrlWrapper(patchContact),
 );
 
 router.delete('/contacts/:id', auth, isValidId, ctrlWrapper(deleteContact));

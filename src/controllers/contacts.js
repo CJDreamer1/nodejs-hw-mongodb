@@ -122,7 +122,6 @@ async function changeUserAvatar(req, res, next) {
   if (process.env.ENABLE_CLOUDINARY === 'true') {
     const response = await uploadToCloudinary(req.file.path);
     await fs.unlink(req.file.path);
-
     await ContactService.changeUserAvatar(req.user._id, response.secure_url);
   } else {
     await fs.rename(
@@ -133,7 +132,7 @@ async function changeUserAvatar(req, res, next) {
 
   await ContactService.changeUserAvatar(
     req.user._id,
-    `http://localhost:3000/uploads/avatars/${req.file.filename}`,
+    `http://localhost:3000/avatars/${req.file.filename}`,
   );
 
   res.send({

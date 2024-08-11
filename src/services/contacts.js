@@ -56,10 +56,19 @@ function updateContact(contactId, contact, userId) {
   });
 }
 
+function changeUserAvatar(contactId, avatar, userId) {
+  return Contact.findByIdAndUpdate(
+    { _id: contactId, userId },
+    { avatarUrl: avatar },
+    { new: true },
+  );
+}
+
 export {
   getContacts,
   getContactById,
   createContact,
   deleteContact,
   updateContact,
+  changeUserAvatar,
 };
