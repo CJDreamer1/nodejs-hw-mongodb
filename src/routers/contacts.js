@@ -4,9 +4,8 @@ import {
   getAllContacts,
   getContactById,
   createContact,
-  patchContact,
+  patchContactWithAvatar,
   deleteContact,
-  changeUserAvatar,
 } from '../controllers/contacts.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
@@ -35,10 +34,8 @@ router.patch(
   '/contacts/:id',
   auth,
   isValidId,
-  jsonParser,
   upload.single('avatar'),
-  ctrlWrapper(changeUserAvatar),
-  ctrlWrapper(patchContact),
+  ctrlWrapper(patchContactWithAvatar),
 );
 
 router.delete('/contacts/:id', auth, isValidId, ctrlWrapper(deleteContact));

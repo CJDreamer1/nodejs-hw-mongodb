@@ -74,31 +74,44 @@ async function createContact(req, res, next) {
   }
 }
 
-async function patchContact(req, res, next) {
+async function patchContactWithAvatar(req, res, next) {
   const { id } = req.params;
-
-  const contact = {
-    name: req.body.name,
-    phoneNumber: req.body.phoneNumber,
-    email: req.body.email,
-    isFavourite: req.body.isFavourite,
-    contactType: req.body.contactType,
-  };
+  let avatarUrl;
 
   try {
-    const result = await ContactService.updateContact(
+    // Завантажуємо аватар на Cloudinary або зберігаємо локально
+    if (req.file) {
+      if (process.env.ENABLE_CLOUDINARY === 'true') {
+        const response = await uploadToCloudinary(req.file.path);
+        avatarUrl = response.secure_url;
+        await fs.unlink(req.file.path); // видаляємо тимчасовий файл
+      } else {
+        avatarUrl = `http://localhost:3000/avatars/${req.file.filename}`;
+        await fs.rename(
+          req.file.path,
+          path.resolve('src', 'uploads', 'avatars', req.file.filename),
+        );
+      }
+    }
+
+    // Оновлюємо дані контакта
+    const updatedContact = await ContactService.updateContact(
       id,
-      contact,
+      {
+        ...req.body,
+        ...(avatarUrl && { avatarUrl }), // додаємо аватар до контакта
+      },
       req.user._id,
     );
 
-    if (result === null) {
+    if (!updatedContact) {
       return next(createHttpError(404, 'Contact not found'));
     }
-    res.status(200).send({
+
+    res.status(200).json({
       status: 200,
       message: 'Successfully patched a contact!',
-      data: result,
+      data: updatedContact,
     });
   } catch (error) {
     next(error);
@@ -118,34 +131,10 @@ async function deleteContact(req, res, next) {
   }
 }
 
-async function changeUserAvatar(req, res, next) {
-  if (process.env.ENABLE_CLOUDINARY === 'true') {
-    const response = await uploadToCloudinary(req.file.path);
-    await fs.unlink(req.file.path);
-    await ContactService.changeUserAvatar(req.user._id, response.secure_url);
-  } else {
-    await fs.rename(
-      req.file.path,
-      path.resolve('src', 'uploads', 'avatars', req.file.filename),
-    );
-  }
-
-  await ContactService.changeUserAvatar(
-    req.user._id,
-    `http://localhost:3000/avatars/${req.file.filename}`,
-  );
-
-  res.send({
-    status: 200,
-    message: 'Avatar has been changed successfully',
-  });
-}
-
 export {
   getAllContacts,
   getContactById,
   createContact,
-  patchContact,
   deleteContact,
-  changeUserAvatar,
+  patchContactWithAvatar,
 };
