@@ -17,7 +17,6 @@ import { auth } from '../middlewares/authenticate.js';
 import { upload } from '../middlewares/upload.js';
 
 const router = express.Router();
-const jsonParser = express.json();
 
 router.get('/contacts', auth, ctrlWrapper(getAllContacts));
 router.get('/contacts/:id', auth, isValidId, ctrlWrapper(getContactById));
@@ -25,7 +24,7 @@ router.get('/contacts/:id', auth, isValidId, ctrlWrapper(getContactById));
 router.post(
   '/contacts',
   auth,
-  jsonParser,
+  upload.single('photo'), // Додаємо middleware для завантаження файлів
   validateBody(contactSchema),
   ctrlWrapper(createContact),
 );
@@ -34,7 +33,8 @@ router.patch(
   '/contacts/:id',
   auth,
   isValidId,
-  upload.single('avatar'),
+  upload.single('photo'),
+  validateBody(contactSchema),
   ctrlWrapper(patchContactWithAvatar),
 );
 

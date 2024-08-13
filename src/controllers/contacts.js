@@ -53,17 +53,36 @@ async function getContactById(req, res, next) {
 }
 
 async function createContact(req, res, next) {
-  const contact = {
-    name: req.body.name,
-    phoneNumber: req.body.phoneNumber,
-    email: req.body.email,
-    isFavourite: req.body.isFavourite,
-    contactType: req.body.contactType,
-    userId: req.user._id,
-  };
+  let photo = null;
 
   try {
+    // Завантаження аватара на Cloudinary або збереження локально
+    if (req.file) {
+      if (process.env.ENABLE_CLOUDINARY === 'true') {
+        const response = await uploadToCloudinary(req.file.path);
+        photo = response.secure_url;
+        await fs.unlink(req.file.path); // видаляємо тимчасовий файл
+      } else {
+        photo = `http://localhost:3000/avatars/${req.file.filename}`;
+        await fs.rename(
+          req.file.path,
+          path.resolve('src', 'uploads', 'avatars', req.file.filename),
+        );
+      }
+    }
+
+    const contact = {
+      name: req.body.name,
+      phoneNumber: req.body.phoneNumber,
+      email: req.body.email,
+      isFavourite: req.body.isFavourite,
+      contactType: req.body.contactType,
+      userId: req.user._id,
+      photo, // додаємо аватар до об'єкта контакту
+    };
+    console.log(contact);
     const createdContact = await ContactService.createContact(contact);
+
     res.status(201).send({
       status: 201,
       message: 'Successfully created a contact!',
@@ -76,17 +95,17 @@ async function createContact(req, res, next) {
 
 async function patchContactWithAvatar(req, res, next) {
   const { id } = req.params;
-  let avatarUrl;
+  let photo;
 
   try {
     // Завантажуємо аватар на Cloudinary або зберігаємо локально
     if (req.file) {
       if (process.env.ENABLE_CLOUDINARY === 'true') {
         const response = await uploadToCloudinary(req.file.path);
-        avatarUrl = response.secure_url;
+        photo = response.secure_url;
         await fs.unlink(req.file.path); // видаляємо тимчасовий файл
       } else {
-        avatarUrl = `http://localhost:3000/avatars/${req.file.filename}`;
+        photo = `http://localhost:3000/avatars/${req.file.filename}`;
         await fs.rename(
           req.file.path,
           path.resolve('src', 'uploads', 'avatars', req.file.filename),
@@ -99,7 +118,7 @@ async function patchContactWithAvatar(req, res, next) {
       id,
       {
         ...req.body,
-        ...(avatarUrl && { avatarUrl }), // додаємо аватар до контакта
+        ...(photo && { photo }), // додаємо аватар до контакта
       },
       req.user._id,
     );
