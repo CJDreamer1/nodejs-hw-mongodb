@@ -1,0 +1,47 @@
+tags:
+  - Contacts
+summary: Create contact
+operationId: createContact
+description: 'Create contact'
+security:
+  - bearerAuth: []
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - name
+          - phoneNumber
+          - contactType
+          - userId
+        properties:
+          name:
+            description: 'Name of contact'
+            type: string
+            example: 'John Doe'
+          phoneNumber:
+            description: 'Phone number of contact'
+            type: string
+            example: +380123456789
+          email:
+            description: 'Email of contact'
+            type: string
+            example: 'jonhdoe@gmail.com'
+          contactType:
+            description: 'Type of contact'
+            type: string
+            enum: ['work', 'home', 'personal']
+            example: work
+          userId:
+            description: 'User`s id'
+            type: string
+            example: 66ae30aeed34d53e1d14a473
+          photo:
+            description: 'User`s photo'
+            type: string
+responses:
+  '200':
+    $ref: ../../components/responses/200.yaml
+  '404':
+    $ref: ../../components/responses/404.yaml

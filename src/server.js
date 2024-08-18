@@ -10,12 +10,15 @@ import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import contactsRoutes from './routers/contacts.js';
 import authRoutes from './routers/auth.js';
 
+import { swaggerDocs } from '../src/middlewares/swaggerDocs.js';
+
 dotenv.config();
 
 const PORT = Number(process.env.PORT) || 3000;
 
 export function setupServer() {
   const app = express();
+  app.use('/api-docs', swaggerDocs());
 
   app.use(cookieParser());
 

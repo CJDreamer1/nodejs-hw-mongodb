@@ -1,0 +1,31 @@
+tags:
+  - Contacts
+summary: Get all contacts
+operationId: getAllContacts
+description: 'Get all contacts'
+security:
+  - bearerAuth: []
+parameters:
+  - in: query
+    name: contacts
+    required: false
+    schema:
+      type: array
+    example:
+      [
+        {
+          '_id': '66bb5f9359270656b4e3daef',
+          'name': 'John Doe',
+          'phoneNumber': 380123456789,
+          'email': 'jonhdoe@gmail.com',
+          'isFavourite': false,
+          'contactType': 'work',
+          'userId': '66ae30aeed34d53e1d14a473',
+          'photo': 'string',
+        },
+      ]
+responses:
+  '200':
+    $ref: ../../components/responses/200.yaml
+  '404':
+    $ref: ../../components/responses/404.yaml
