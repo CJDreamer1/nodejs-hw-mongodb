@@ -11,7 +11,7 @@ tags:
     description: Operations with contacts
 servers:
   - url: http://localhost:3000
-  # - url: #посилання на задеплоєний сайт
+  - url: https://nodejs-hw-mongodb-ski6.onrender.com/api-docs
 paths:
   /contacts/{id}:
     get:

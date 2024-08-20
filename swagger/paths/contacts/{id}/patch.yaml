@@ -35,10 +35,6 @@ requestBody:
             type: string
             enum: ['work', 'home', 'personal']
             example: work
-          userId:
-            description: 'User`s id'
-            type: string
-            example: 66ae30aeed34d53e1d14a473
           photo:
             description: 'User`s photo'
             type: string

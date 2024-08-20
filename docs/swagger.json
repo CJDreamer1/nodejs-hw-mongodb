@@ -12,6 +12,9 @@
   "servers": [
     {
       "url": "http://localhost:3000"
+    },
+    {
+      "url": "https://nodejs-hw-mongodb-ski6.onrender.com/api-docs"
     }
   ],
   "tags": [
@@ -107,11 +110,6 @@
                       "personal"
                     ],
                     "example": "work"
-                  },
-                  "userId": {
-                    "description": "User`s id",
-                    "type": "string",
-                    "example": "66ae30aeed34d53e1d14a473"
                   },
                   "photo": {
                     "description": "User`s photo",
@@ -228,8 +226,7 @@
                 "required": [
                   "name",
                   "phoneNumber",
-                  "contactType",
-                  "userId"
+                  "contactType"
                 ],
                 "properties": {
                   "name": {
@@ -256,11 +253,6 @@
                       "personal"
                     ],
                     "example": "work"
-                  },
-                  "userId": {
-                    "description": "User`s id",
-                    "type": "string",
-                    "example": "66ae30aeed34d53e1d14a473"
                   },
                   "photo": {
                     "description": "User`s photo",
@@ -299,7 +291,6 @@
           "email",
           "isFavourite",
           "contactType",
-          "userId",
           "photo"
         ],
         "properties": {
@@ -338,11 +329,6 @@
               "personal"
             ],
             "example": "work"
-          },
-          "userId": {
-            "description": "User`s id",
-            "type": "string",
-            "example": "66ae30aeed34d53e1d14a473"
           },
           "photo": {
             "description": "Photo of contact",
